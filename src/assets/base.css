@@ -1,0 +1,84 @@
+@font-face {
+  font-family: 'DM Sans';
+  src: url('@/assets/fonts/DMSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('@/assets/fonts/DMSans-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DM Sans';
+  src: url('@/assets/fonts/DMSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+:root {
+  --vt-c-dark: #282828;
+  --vt-c-white: #fff;
+  --vt-c-white-dimmed: rgba(255, 255, 255, 0.45);
+  --vt-c-white-dimmed-dark: rgba(255, 255, 255, 0.2);
+  --vt-c-red: #d90e32;
+}
+
+:root {
+  --color-background: var(--vt-c-dark);
+  --color-background-dimmed: var(--vt-c-white-dimmed-dark);
+  --color-text-white: var(--vt-c-white);
+  --color-text-white-dimmed: var(--vt-c-white-dimmed);
+
+  --color-red: var(--vt-c-red);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100dvh;
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a,
+a:visited {
+  text-decoration: none;
+  color: inherit;
+}
+
+input {
+  border: none;
+  outline: none;
+  padding: 0;
+  background: none;
+}
+
+button {
+  border: none;
+  outline: none;
+  background: none;
+  cursor: pointer;
+}
+
+ul,
+ol {
+  padding-left: 0;
+  list-style: none;
+}

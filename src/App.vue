@@ -58,11 +58,11 @@ const route = useRoute();
   display: flex;
   flex-direction: column;
   row-gap: 64px;
+  flex-grow: 1;
 }
 
 .header__title {
-  font-size: 24px;
-  font-weight: 700;
+  font: 700 24px/1 'DM Sans';
   color: var(--color-text-white);
   text-align: center;
   margin-bottom: 115px;

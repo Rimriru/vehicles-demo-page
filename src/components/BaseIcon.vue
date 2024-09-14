@@ -5,16 +5,22 @@ import UserIcon from './icons/UserIcon.vue';
 import RimIcon from './icons/RimIcon.vue';
 import SettingsIcon from './icons/SettingsIcon.vue';
 import ArrowDownIcon from './icons/ArrowDownIcon.vue';
+import ArrowLeftIcon from './icons/ArrowLeftIcon.vue';
+import ArrowRightIcon from './icons/ArrowRightIcon.vue';
 import ZoomIcon from './icons/ZoomIcon.vue';
 import MoreHorizontalIcon from './icons/MoreHorizontalIcon.vue';
+import CheckIcon from './icons/CheckIcon.vue';
 
 const icons = {
   user: UserIcon,
   rim: RimIcon,
   settings: SettingsIcon,
   arrowDown: ArrowDownIcon,
+  arrowLeft: ArrowLeftIcon,
+  arrowRight: ArrowRightIcon,
   zoom: ZoomIcon,
-  moreHorizontal: MoreHorizontalIcon
+  moreHorizontal: MoreHorizontalIcon,
+  check: CheckIcon
 };
 
 const props = defineProps({

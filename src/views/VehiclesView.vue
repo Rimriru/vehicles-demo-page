@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 import AddButton from '@/components/AddButton.vue';
 import InfoBox from '@/components/InfoBox.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
@@ -8,14 +8,43 @@ import { VEHICLES_API_ENDPOINT } from '@/utils/constants';
 import AppLoader from '@/components/AppLoader.vue';
 import AppPagination from '@/components/AppPagination.vue';
 
+const allVehicles = ref<Array<any>>([]);
 const vehiclesList = ref<Array<any> | null | undefined>(null);
+const searchValue = ref('');
+const page = ref(1);
 const requestError = ref('');
 const vehiclesPerPage = ref(9);
 const isLoading = ref(false);
+let vehiclesTotal = 0;
+
+const finalPage = computed(() => {
+  return vehiclesList.value ? Math.ceil(vehiclesList.value.length / vehiclesPerPage.value) : 1;
+});
+
+const onNextBtnClick = () => (page.value = page.value + 1);
+
+const onPrevBtnClick = () => (page.value = page.value - 1);
+
+const indexes = computed(() => {
+  const firstIndex = (page.value - 1) * vehiclesPerPage.value;
+  const lastIndex = firstIndex + vehiclesPerPage.value;
+  return { firstIndex, lastIndex };
+});
+
+const vehicles = computed(() => {
+  return vehiclesList.value?.slice(indexes.value.firstIndex, indexes.value.lastIndex);
+});
+
+const onSearchInputChange = () => {
+  vehiclesList.value = allVehicles.value?.filter((vehicle) =>
+    vehicle.vin.toUpperCase().includes(searchValue.value.toUpperCase())
+  );
+};
 
 const onVehiclesPerPageChange = (evt: any) => {
   const value = evt.target.value;
-  vehiclesPerPage.value = value;
+  vehiclesPerPage.value = Number(value);
+  page.value = 1;
 };
 
 onMounted(async () => {
@@ -31,7 +60,11 @@ onMounted(async () => {
       isLoading.value = false;
     }
   };
-  vehiclesList.value = await getVehiclesList();
+  allVehicles.value = await getVehiclesList();
+  if (allVehicles.value) {
+    vehiclesTotal = allVehicles.value.length;
+    vehiclesList.value = allVehicles.value;
+  }
 });
 </script>
 
@@ -40,7 +73,7 @@ onMounted(async () => {
     <section class="flex-centered vehicles__header">
       <div class="flex-centered vehicles__heading-wrapper">
         <h1>Vehicles</h1>
-        <InfoBox v-if="vehiclesList && vehiclesList.length">{{ vehiclesList?.length }}</InfoBox>
+        <InfoBox v-if="vehiclesTotal">{{ vehiclesTotal }}</InfoBox>
       </div>
       <div class="flex-centered vehicles__user-wrapper">
         <AddButton :size="'sm'" is-transparent class="vehicles__add-btn_place_header" />
@@ -56,9 +89,14 @@ onMounted(async () => {
       </div>
     </section>
     <section class="vehicles__management">
-      <form>
+      <form @submit.prevent>
         <label class="rounded-border vehicles__search-label">
-          <input type="text" placeholder="Search VIN" />
+          <input
+            v-model.trim="searchValue"
+            type="text"
+            placeholder="Search VIN"
+            @keyup="onSearchInputChange"
+          />
           <BaseIcon :name="'zoom'" class="vehicles__zoom-icon" />
         </label>
         <label class="vehicles__select-label">Select vehicles per page: </label>
@@ -76,14 +114,20 @@ onMounted(async () => {
     <section class="vehicles__search-result">
       <AppLoader v-if="isLoading" />
       <span v-if="requestError" class="error vehicles__error">{{ requestError }}</span>
-      <ul v-if="vehiclesList && vehiclesList.length" class="vehicles__list">
-        <li v-for="{ id, vehicle_name, vin, placeholder } of vehiclesList" :key="id">
+      <ul v-if="vehicles && vehicles.length" class="vehicles__list">
+        <li v-for="{ id, vehicle_name, vin, placeholder } of vehicles" :key="id">
           <VehicleCard :name="vehicle_name" :vin="vin" :image-src="placeholder" />
         </li>
       </ul>
     </section>
     <section class="vehicles__footer">
-      <p>Showing {{}} out of {{ vehiclesList?.length }}</p>
+      <p>Showing {{ vehicles?.length }} out of {{ vehiclesList?.length }}</p>
+      <AppPagination
+        :current-page="page"
+        :final-page="finalPage"
+        @next-btn-click="onNextBtnClick"
+        @previous-btn-click="onPrevBtnClick"
+      />
     </section>
   </main>
 </template>
@@ -232,5 +276,15 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
+}
+
+.vehicles__footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 32px 30px 45px;
+}
+
+.vehicles__footer p {
+  color: var(--color-text-black-dimmed);
 }
 </style>

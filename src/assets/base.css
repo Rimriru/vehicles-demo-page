@@ -23,6 +23,7 @@
   --vt-c-dark: #282828;
   --vt-c-black: rgb(41, 49, 72);
   --vt-c-black-dimmed: rgba(41, 49, 72, 0.8);
+  --vt-c-black-dimmed-strong: rgba(41, 49, 72, 0.6);
   --vt-c-white: #fff;
   --vt-c-white-dimmed: rgba(255, 255, 255, 0.45);
   --vt-c-white-dimmed-dark: rgba(255, 255, 255, 0.2);
@@ -30,6 +31,8 @@
   --vt-c-gray-medium: #e4e4e4;
   --vt-c-red: #d90e32;
   --vt-c-red-light: #e86e84;
+  --vt-c-green: #7fc75e;
+  --vt-c-green-light: #e4f5dd;
 }
 
 :root {
@@ -40,11 +43,15 @@
   --color-text-white-dimmed: var(--vt-c-white-dimmed);
   --color-text-black: var(--vt-c-black);
   --color-text-black-dimmed: var(--vt-c-black-dimmed);
+  --color-text-black-dimmed-strong: var(--vt-c-black-dimmed-strong);
+  --color-text-green: var(--vt-c-green);
 
   --color-red: var(--vt-c-red);
   --color-btn-red: var(--vt-c-red-light);
 
   --color-line-gray: var(--vt-c-gray-medium);
+
+  --color-background-green: var(--vt-c-green-light);
 }
 
 *,
@@ -82,6 +89,7 @@ input {
 }
 
 button {
+  padding: 0;
   border: none;
   outline: none;
   background: none;

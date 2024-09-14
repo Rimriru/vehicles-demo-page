@@ -7,7 +7,5 @@
 <style scoped>
 div {
   background: url('@/assets/images/icons/arrow-down.svg') no-repeat center center;
-  width: 24px;
-  height: 24px;
 }
 </style>

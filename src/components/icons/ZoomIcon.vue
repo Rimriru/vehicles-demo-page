@@ -6,6 +6,6 @@
 
 <style scoped>
 div {
-  background: url('@/assets/images/icons/settings.svg') no-repeat center center;
+  background: url('@/assets/images/icons/zoom.svg') no-repeat center center;
 }
 </style>

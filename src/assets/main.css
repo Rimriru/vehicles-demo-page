@@ -4,3 +4,8 @@
   display: flex;
   margin: 0 auto;
 }
+
+.error {
+  color: var(--color-red);
+  font: 500 18px/1.4 'DM Sans';
+}

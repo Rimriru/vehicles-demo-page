@@ -18,6 +18,7 @@ defineProps<{
       }
     ]"
     type="button"
+    :aria-label="size === 'sm' ? 'Add' : ''"
   >
     <PlusIcon :color="isTransparent ? 'red' : 'white'" />
     <slot />
@@ -27,6 +28,12 @@ defineProps<{
 <style scoped>
 .add-btn {
   padding-block: 9px;
+  font: 700 12px/1.66 'DM Sans';
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .add-btn_size_small {

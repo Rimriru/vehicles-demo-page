@@ -1,10 +1,14 @@
+<script setup lang="ts">
+defineProps<{
+  isChecked?: boolean;
+}>();
+</script>
+
 <template>
-  <div>
+  <div :class="{ checked: isChecked }">
     <slot />
   </div>
 </template>
-
-<script setup lang="ts"></script>
 
 <style scoped>
 div {
@@ -13,5 +17,11 @@ div {
   border-radius: 6px;
   font: 700 15px/1.4 'DM Sans';
   color: var(--color-text-black-dimmed);
+  display: inline;
+}
+
+div.checked {
+  color: var(--color-text-green);
+  background-color: var(--color-background-green);
 }
 </style>

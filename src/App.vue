@@ -1,26 +1,8 @@
 <script setup lang="ts">
 import { RouterView, useRoute } from 'vue-router';
-import UserIcon from './components/icons/UserIcon.vue';
-import RimIcon from './components/icons/RimIcon.vue';
-import SettingsIcon from './components/icons/SettingsIcon.vue';
-
-const HEADER_LINKS = [
-  {
-    title: 'Profile',
-    path: '#',
-    icon: UserIcon
-  },
-  {
-    title: 'Vehicles',
-    path: '/vehicles',
-    icon: RimIcon
-  },
-  {
-    title: 'Setting',
-    path: '#',
-    icon: SettingsIcon
-  }
-];
+import BaseIcon from './components/BaseIcon.vue';
+import { HEADER_LINKS } from './utils/constants';
+import vehiclesTotal from '@/composables/useVehicles';
 
 const route = useRoute();
 </script>
@@ -36,7 +18,7 @@ const route = useRoute();
             :key="JSON.stringify(link)"
             :class="['header__link-item', { 'header__link-item_active': route.path === link.path }]"
           >
-            <component :is="link.icon"></component>
+            <BaseIcon :name="link.icon"></BaseIcon>
             <RouterLink v-if="link.path !== '#'" :to="link.path">{{ link.title }}</RouterLink>
             <a v-else :href="link.path">{{ link.title }}</a>
           </li>

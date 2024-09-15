@@ -158,7 +158,7 @@ onMounted(async () => {
 .vehicles__header {
   width: 100%;
   justify-content: space-between;
-  padding: 30px;
+  padding: 30px 30px 26px;
   color: var(--color-text-black);
   border-bottom: var(--color-line-gray) 1px solid;
 }
@@ -209,20 +209,22 @@ h1 {
 }
 
 .vehicles__search-label {
+  width: 354px;
   position: relative;
-  padding: 9px 83px 9px 16px;
+  padding: 9px 50px 9px 16px;
   font: inherit;
   margin-right: 32px;
 }
 
 .vehicles__search-label input {
   font: inherit;
+  width: 100%;
 }
 
 .vehicles__zoom-icon {
   position: absolute;
   top: 8px;
-  right: 9px;
+  right: 14px;
 }
 
 .vehicles__select-label {

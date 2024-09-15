@@ -35,9 +35,9 @@ const emit = defineEmits(['previousBtnClick', 'nextBtnClick']);
 <style scoped>
 .pagination {
   display: flex;
-  column-gap: 12px;
+  column-gap: 16px;
   color: var(--color-text-black-dimmed);
-  font: 400 13px/1.85 'DM Sans';
+  font: 400 13px/1.5 'DM Sans';
   align-items: center;
 }
 
@@ -46,6 +46,7 @@ const emit = defineEmits(['previousBtnClick', 'nextBtnClick']);
   border-radius: 6px;
   padding: 5px 6px;
   min-width: 32px;
+  aspect-ratio: 1;
   text-align: center;
 }
 

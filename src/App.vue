@@ -2,7 +2,6 @@
 import { RouterView, useRoute } from 'vue-router';
 import BaseIcon from './components/BaseIcon.vue';
 import { HEADER_LINKS } from './utils/constants';
-import vehiclesTotal from '@/composables/useVehicles';
 
 const route = useRoute();
 </script>
@@ -11,8 +10,8 @@ const route = useRoute();
   <header class="header">
     <div>
       <p class="header__title">Demo Test</p>
-      <nav class="header__nav">
-        <ul>
+      <nav>
+        <ul class="header__links-list">
           <li
             v-for="link of HEADER_LINKS"
             :key="JSON.stringify(link)"
@@ -34,20 +33,24 @@ const route = useRoute();
 <style scoped>
 .header {
   background-color: var(--color-background);
-  max-width: 256px;
-  min-height: 1400px;
+  flex-basis: 256px;
+  min-height: 1386px;
   padding-top: 30px;
   display: flex;
   flex-direction: column;
-  row-gap: 64px;
-  flex-grow: 1;
+  row-gap: 40px;
 }
 
 .header__title {
   font: 700 24px/1 'DM Sans';
   color: var(--color-text-white);
-  text-align: center;
-  margin-bottom: 115px;
+  margin: 0 0 100px 56px;
+}
+
+.header__links-list {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
 }
 
 .header__link-item {

@@ -33,7 +33,7 @@ const route = useRoute();
 <style scoped>
 .header {
   background-color: var(--color-background);
-  flex-basis: 256px;
+  flex: 0 0 256px;
   min-height: 1386px;
   padding-top: 30px;
   display: flex;

@@ -1,50 +1,78 @@
 <script setup lang="ts">
-import { onMounted, ref, computed } from 'vue';
+import { onMounted, ref, computed, watch } from 'vue';
 import AddButton from '@/components/AddButton.vue';
 import InfoBox from '@/components/InfoBox.vue';
 import BaseIcon from '@/components/BaseIcon.vue';
 import VehicleCard from '@/components/VehicleCard.vue';
-import { VEHICLES_API_ENDPOINT } from '@/utils/constants';
 import AppLoader from '@/components/AppLoader.vue';
 import AppPagination from '@/components/AppPagination.vue';
+import { VEHICLES_API_ENDPOINT } from '@/utils/constants';
 
-const allVehicles = ref<Array<any>>([]);
+//const allVehicles = ref<Array<any>>([]);
 const vehiclesList = ref<Array<any> | null | undefined>(null);
 const searchValue = ref('');
 const page = ref(1);
 const requestError = ref('');
 const vehiclesPerPage = ref(9);
 const isLoading = ref(false);
-let vehiclesTotal = 0;
+const vehiclesTotal = ref(0);
 
 const finalPage = computed(() => {
-  return vehiclesList.value ? Math.ceil(vehiclesList.value.length / vehiclesPerPage.value) : 1;
+  return vehiclesList.value ? Math.ceil(vehiclesTotal.value / vehiclesPerPage.value) : 1;
 });
+
+const getVehicles = async (searchQuery: string, vehiclesPerPage: number, page: number) => {
+  vehiclesList.value = null;
+  isLoading.value = true;
+  const vehiclesPerPageQuery = vehiclesPerPage
+    ? searchQuery
+      ? `&per_page=${vehiclesPerPage}`
+      : `per_page=${vehiclesPerPage}`
+    : '';
+  const pageQuery = page
+    ? searchQuery || vehiclesPerPageQuery
+      ? `&page=${page}`
+      : `page=${page}`
+    : '';
+  try {
+    const response = await fetch(
+      `${VEHICLES_API_ENDPOINT}?${searchQuery ? `search=${searchQuery}` : ''}${vehiclesPerPageQuery}${pageQuery}`
+    );
+    const list = await response.json();
+    return list;
+  } catch (error: any) {
+    requestError.value = error.toString();
+  } finally {
+    isLoading.value = false;
+  }
+};
 
 const onNextBtnClick = () => (page.value = page.value + 1);
 
 const onPrevBtnClick = () => (page.value = page.value - 1);
 
-const indexes = computed(() => {
-  const firstIndex = (page.value - 1) * vehiclesPerPage.value;
-  const lastIndex = firstIndex + vehiclesPerPage.value;
-  return { firstIndex, lastIndex };
+watch([page], async () => {
+  const { data, meta } = await getVehicles(searchValue.value, vehiclesPerPage.value, page.value);
+  vehiclesList.value = data;
+  vehiclesTotal.value = meta.total;
 });
 
-const vehicles = computed(() => {
-  return vehiclesList.value?.slice(indexes.value.firstIndex, indexes.value.lastIndex);
-});
-
-const onSearchInputChange = () => {
-  vehiclesList.value = allVehicles.value?.filter((vehicle) =>
-    vehicle.vin.toUpperCase().includes(searchValue.value.toUpperCase())
-  );
-};
-
-const onVehiclesPerPageChange = (evt: any) => {
+const onVehiclesPerPageChange = async (evt: any) => {
   const value = evt.target.value;
   vehiclesPerPage.value = Number(value);
   page.value = 1;
+  const { data } = await getVehicles(searchValue.value, vehiclesPerPage.value, page.value);
+  vehiclesList.value = data;
+};
+
+const onSearchFormSubmit = async () => {
+  if (page.value > 1) {
+    page.value = 1;
+    return;
+  }
+  const { data, meta } = await getVehicles(searchValue.value, vehiclesPerPage.value, page.value);
+  vehiclesList.value = data;
+  vehiclesTotal.value = meta.total;
 };
 
 onMounted(async () => {
@@ -53,17 +81,17 @@ onMounted(async () => {
     try {
       const response = await fetch(VEHICLES_API_ENDPOINT);
       const list = await response.json();
-      return list.data;
+      return list;
     } catch (error: any) {
       requestError.value = error.toString();
     } finally {
       isLoading.value = false;
     }
   };
-  allVehicles.value = await getVehiclesList();
-  if (allVehicles.value) {
-    vehiclesTotal = allVehicles.value.length;
-    vehiclesList.value = allVehicles.value;
+  const { data, meta } = await getVehiclesList();
+  if (data && meta) {
+    vehiclesTotal.value = meta.total;
+    vehiclesList.value = data.slice(0, vehiclesPerPage.value);
   }
 });
 </script>
@@ -89,15 +117,12 @@ onMounted(async () => {
       </div>
     </section>
     <section class="vehicles__management">
-      <form @submit.prevent>
+      <form @submit.prevent="onSearchFormSubmit">
         <label class="rounded-border vehicles__search-label">
-          <input
-            v-model.trim="searchValue"
-            type="text"
-            placeholder="Search VIN"
-            @keyup="onSearchInputChange"
-          />
-          <BaseIcon :name="'zoom'" class="vehicles__zoom-icon" />
+          <input v-model.trim="searchValue" type="text" placeholder="Search VIN" />
+          <button type="submit" class="vehicles__submit-btn">
+            <BaseIcon :name="'zoom'" />
+          </button>
         </label>
         <label class="vehicles__select-label">Select vehicles per page: </label>
         <div class="rounded-border vehicles__select">
@@ -114,14 +139,14 @@ onMounted(async () => {
     <section class="vehicles__search-result">
       <AppLoader v-if="isLoading" />
       <span v-if="requestError" class="error vehicles__error">{{ requestError }}</span>
-      <ul v-if="vehicles && vehicles.length" class="vehicles__list">
-        <li v-for="{ id, vehicle_name, vin, placeholder } of vehicles" :key="id">
+      <ul v-if="vehiclesList && vehiclesList.length" class="vehicles__list">
+        <li v-for="{ id, vehicle_name, vin, placeholder } of vehiclesList" :key="id">
           <VehicleCard :name="vehicle_name" :vin="vin" :image-src="placeholder" />
         </li>
       </ul>
     </section>
     <section class="vehicles__footer">
-      <p>Showing {{ vehicles?.length }} out of {{ vehiclesList?.length }}</p>
+      <p>Showing {{ vehiclesList?.length }} out of {{ vehiclesTotal }}</p>
       <AppPagination
         :current-page="page"
         :final-page="finalPage"
@@ -221,7 +246,7 @@ h1 {
   width: 100%;
 }
 
-.vehicles__zoom-icon {
+.vehicles__submit-btn {
   position: absolute;
   top: 8px;
   right: 14px;
@@ -267,6 +292,7 @@ h1 {
 /** Лоадер **/
 .vehicles__search-result > div {
   margin-top: 100px;
+  margin-inline: auto;
 }
 
 .vehicles__error {

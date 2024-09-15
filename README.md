@@ -1,39 +1,35 @@
-# vehicles-demo-page
+# Vehicles Demo Page
 
-This template should help get you started developing with Vue 3 in Vite.
+## О проекте
 
-## Recommended IDE Setup
+Предоставляет функциональность поиска и отображения автомобилей.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+### Ветки
 
-## Type Support for `.vue` Imports in TS
+`main`: Основная ветка с реализацией поиска машин на фронтенде.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+`feat/api-based-search`: Ветка с альтернативной имплементацией поиска, использующей API.
 
-## Customize configuration
+## Технологии и инструменты
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+Проект использует следующие технологии и инструменты:
 
-## Project Setup
+- Node.js – 18.18.0, npm – 9.8.1
+- Vue 3
+- Vite
+- TypeScript
+- Vue Router
+
+## Установка и запуск
+
+Чтобы установить проект, выполните команду:
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+Чтобы запустить проект, выполните следующую команду:
 
 ```sh
 npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```

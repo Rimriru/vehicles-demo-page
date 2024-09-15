@@ -8,7 +8,6 @@ import AppLoader from '@/components/AppLoader.vue';
 import AppPagination from '@/components/AppPagination.vue';
 import { VEHICLES_API_ENDPOINT } from '@/utils/constants';
 
-//const allVehicles = ref<Array<any>>([]);
 const vehiclesList = ref<Array<any> | null | undefined>(null);
 const searchValue = ref('');
 const page = ref(1);
